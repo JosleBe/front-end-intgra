@@ -1,0 +1,22 @@
+/* Estilos para las flechas de navegación */
+.carousel-prev, .carousel-next {
+  background-color: rgba(0, 0, 0, 0.5) !important; /* Fondo oscuro */
+  color: white !important; /* Color de las flechas en blanco */
+  border-radius: 50%; /* Bordes redondeados para un efecto circular */
+  padding: 10px; /* Un poco de espacio para las flechas */
+}
+
+/* Opcional: cambia el color de las flechas cuando haces hover */
+.carousel-prev:hover, .carousel-next:hover {
+  background-color: rgba(0, 0, 0, 0.8) !important; /* Fondo más oscuro al hacer hover */
+  color: white !important; /* Mantener el color blanco de las flechas */
+}
+
+/* Asegúrate de que el carrusel tenga los puntos de navegación */
+.carousel .slick-dots li button {
+  background-color: black; /* Cambiar el color del fondo de los puntos */
+}
+
+.carousel .slick-dots li.slick-active button {
+  background-color: white; /* Cambiar el color del punto activo */
+}

@@ -1,0 +1,21 @@
+.wrapper-error {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100VH;
+}
+.error-page > h1 {
+    font-weight: bolder;
+    font-size: 3rem;
+}
+.error-page > p {
+    margin-top: 40px;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
