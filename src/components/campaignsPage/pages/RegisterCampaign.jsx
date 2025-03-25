@@ -6,12 +6,11 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { NavLink, useLocation } from 'react-router-dom';
 import { FormControl, FormLabel, Stack } from '@mui/material';
 import { Button, Input, List, message, Modal, Radio } from 'antd';
-import ImagePlantilla from '../../assets/img/voluntarios.jpg';
+import ImagePlantilla from '../../../assets/img/voluntarios.jpg';
 import TextArea from 'antd/es/input/TextArea';
-import Plantillas from './Plantillas';
+import Plantillas from '../components/Templates';
 import { Carousel, IconButton } from '@material-tailwind/react';
 import { DollarOutlined, ExclamationCircleOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import './Register.css'
 import { ChevronLeft, ChevronRight, CircleChevronLeft } from 'lucide-react';
 import axios from 'axios';
 const RegisterCampaign = () => {

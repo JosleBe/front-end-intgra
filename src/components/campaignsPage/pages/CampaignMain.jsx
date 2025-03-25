@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from 'react'
-
+import { format } from 'date-fns';
 import Box from '@mui/joy/Box';
-import axios from 'axios';
+import CampaignService from '../../../service/CampaignService'
 import { Button, Typography } from '@material-tailwind/react';
-import Navigator from './Navigator';
+import Navigator from '../components/Navigator';
+import { useNavigate } from 'react-router-dom';
 const CampaignMain = () => {
-
+    const navigate = useNavigate();
     const [campaigns, setCampaigns] = useState([]);
     useEffect(() => {
         const fetchCampaigns = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/campaign',
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("token")}`
-                        }
-                    }
-
-                ); // URL de tu API
-                setCampaigns(response.data.data); // Suponiendo que tu respuesta contiene las campañas en 'data'
-                console.log(response.data.data)
-            } catch (error) {
-                console.error('Error al obtener las campañas', error);
-            }
+          try {
+            const data = await CampaignService.getAllCampaigns(localStorage.getItem("token"));
+            setCampaigns(data);
+          } catch (error) {
+            console.error("Error al obtener las campañas:", error);
+          }
         };
+      
         fetchCampaigns();
-    }, []);
+      }, []);
     const plantillas = [
         {
             nombre: "Moderna Azul",
@@ -139,20 +133,59 @@ const CampaignMain = () => {
     return (
         <div>
             <Box sx={{ flex: 1, width: '100%' }}>
-                <Navigator />
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
-                    {campaigns.map((campana) => {
+                <Box
+                    sx={{
+                        position: 'sticky',
+                        top: 0,  // Esto hace que se quede fijo en la parte superior cuando hagas scroll
+                        zIndex: 9995,  // Asegura que el componente esté encima de otros elementos
+                        bgcolor: 'background.body',  // Asegura que el fondo sea consistente
+                    }}
+                >
+                    <Navigator />
+                </Box>
 
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', }}>
+                    {campaigns.map((campana) => {
                         const plantilla = plantillas.find(p => p.codigo === campana.templateEntity?.codigo);
                         if (plantilla) {
-                            console.log("hola")
+                            // Formatear las fechas
+                            const formattedStartDate = format(new Date(campana.fechaInicio), 'MMMM yyyy dd');
+                            const formattedEndDate = format(new Date(campana.fechaFin), 'MMMM yyyy dd');
+                            console.log(formattedStartDate)
                             return (
-                                <Box key={campana.id} sx={{ width: '300px' }}>
+                                <Box
+                                    key={campana.id}
+                                    sx={{
+                                        width: '300px',
+                                        cursor: 'pointer',
+                                        '&:hover': { backgroundColor: '#f0f0f0' },
+                                        padding: 2,
+                                        borderRadius: 2,
+                                        boxShadow: 2,
+                                    }}
+                                    onClick={() =>
+                                        navigate('/view-campaign', {
+                                            state: {
+                                                titulo: campana.nombre,
+                                                descripcion: campana.descripcion,
+                                                imagen: campana.image,
+                                                categoria: campana.categoria,
+                                                recurso: campana.recursoTipo,
+                                                startDate: formattedStartDate,
+                                                endDate: formattedEndDate,  // Pasamos las fechas formateadas
+                                                locationmap: campana.location.coordinates,
+                                                address: campana.location.address,
+                                                id: campana.id
+                                            },
+                                        })
+                                    }
+                                >
                                     {plantilla.componente({
                                         titulo: campana.nombre,
                                         descripcion: campana.descripcion,
                                         imagen: campana.image,
                                         categoria: campana.categoria,
+                                        recurso: campana.recursoTipo
                                     })}
                                 </Box>
                             );
@@ -161,7 +194,6 @@ const CampaignMain = () => {
                     })}
                 </Box>
             </Box>
-
 
         </div>
     )

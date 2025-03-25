@@ -4,13 +4,14 @@ import LoginPage from "../components/auth/LoginPage";
 import ProfilePage from "../components/userPages/ProfilePage"
 import Layout from "../layouts/Layout";
 import ErrorPage from "../components/errorPage/ErrorPage";
-import RegisterCampaign from "../components/campaignsPage/RegisterCampaign";
+import RegisterCampaign from "../components/campaignsPage/pages/RegisterCampaign";
 import EditProfie from "../components/userPages/EditProfie";
-import CampaignMain from "../components/campaignsPage/CampaignMain";
-import Ubicaciones from "../components/ubicaciones/Ubicaciones";
+import CampaignMain from "../components/campaignsPage/pages/CampaignMain";
+import Ubicaciones from "../components/ubicaciones/Locations";
 import RecuperarContraseña from "../components/auth/RecuperarContraseña";
-import MyUbications from "../components/ubicaciones/MyUbications";
+import MyUbications from "../components/ubicaciones/MyLocations";
 import Chat from "../components/chatInbox/Chat";
+import ViewCampaign from "../components/campaignsPage/pages/ViewCampaign"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -75,6 +76,14 @@ const router = createBrowserRouter([
     element: (
       <Layout>
        <MyUbications />
+      </Layout>
+      )
+  },
+  {
+    path: "/view-campaign",
+    element: (
+      <Layout>
+       <ViewCampaign />
       </Layout>
       )
   },

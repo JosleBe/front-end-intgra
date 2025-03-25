@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import logo from '../../assets/img/logo-pro-help.png';
-import '../sidebar/Sidebar.css';
+import '../sidebar/css/Sidebar.css';
 import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {

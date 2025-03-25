@@ -235,7 +235,7 @@ const MyUbications = () => {
             Mapa de Ubicación
           </Typography>
           <div id="modal-description" className="mt-4">
-            <Mapa lat={selectedCoordinates.lat} lng={selectedCoordinates.lng} />  {/* Muestra el mapa con las coordenadas */}
+            <Mapa lat={selectedCoordinates.lat} lng={selectedCoordinates.lng} height={400}/>  {/* Muestra el mapa con las coordenadas */}
             <Button onClick={handleCloseModal} className="mt-4" fullWidth>
               Cerrar
             </Button>

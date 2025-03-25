@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 
 const API_KEY = "AIzaSyDZhoJFtRUBaI9v9YmSYIJ_pMWHGHj2RH0";
 
-const Mapa = ({ lat, lng }) => {
+const Mapa = ({ lat, lng, height }) => {
   return (
     <APIProvider apiKey={API_KEY}>
-      <div className="w-full h-[400px] rounded-lg shadow-lg">
+      <div style={{height: `${height}px`}} className="w-full rounded-lg shadow-lg">
         <Map
           mapId="bf51a910020fa25a"
           defaultZoom={18}
