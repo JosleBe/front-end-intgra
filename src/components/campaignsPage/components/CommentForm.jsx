@@ -3,6 +3,8 @@ import { Textarea } from "@material-tailwind/react";
 import { LockKeyhole, SendHorizontal, X } from "lucide-react";
 import UserService from "../../../service/UserService";
 import CampaignService from '../../../service/CampaignService'
+import Swal from "sweetalert2";
+
 const CommentForm = ({ campaignId }) => {
   const [texto, setText] = useState("");
   const [image, setImage] = useState(null);
@@ -10,11 +12,18 @@ const CommentForm = ({ campaignId }) => {
   const [showModal, setShowModal] = useState(false);
   const [admins, setAdmins] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const user = JSON.parse(localStorage.getItem("profileInfo"));
-  const { email } = user;
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const profile = JSON.parse(localStorage.getItem("profileInfo")) || {
+    id: "guest",
+    name: "Invitado",
+    role: "guest",
+    email: null
+  };
+  const { email } = profile;
 
   useEffect(() => {
     const fetchAdmins = async () => {
+      if (profile.role === "guest") return;
       try {
         const data = await UserService.getAllAdmins(localStorage.getItem("token"));
         setAdmins(data);
@@ -33,18 +42,55 @@ const CommentForm = ({ campaignId }) => {
   };
 
   const handleSubmit = async () => {
+    if(profile.role === "guest"){
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No puedes enviar comentarios como invitado. Por favor, inicia sesión o regístrate.',
+      });
+      return;
+    }
+    
     await CampaignService.handleSubmit(texto, image, campaignId, setText, setImage);
     console.log("Comentario enviado");
   };
   const handlePrivateMessage = async () => {
-    await CampaignService.handlePrivate(
-      newMessage,
-      email,
-      admins,
-      CampaignService.getChatId,
-      setNewMessage,
-      setShowModal
-    );
+    try {
+      // Mostrar alerta de carga mientras se procesa
+      Swal.fire({
+        title: 'Enviando mensaje...',
+        text: 'Por favor espera un momento',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+  
+      await CampaignService.handlePrivate(
+        newMessage,
+        email,
+        admins,
+        CampaignService.getChatId,
+        setNewMessage,
+        setShowModal
+      );
+  
+      // Mostrar alerta de éxito
+      Swal.fire({
+        icon: 'success',
+        title: 'Mensaje enviado',
+        text: 'Tu mensaje fue enviado correctamente.'
+      });
+  
+    } catch (error) {
+      // Mostrar alerta de error
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al enviar',
+        text: 'Hubo un problema al enviar tu mensaje. Intenta nuevamente.',
+      });
+      console.error("Error en handlePrivateMessage:", error);
+    }
   };
 
 
@@ -76,13 +122,32 @@ const CommentForm = ({ campaignId }) => {
         />
 
         {/* Botón de candado (mensaje privado) */}
-        <button
-          type="button"
-          className="p-2 text-gray-500 rounded-full hover:bg-gray-100 transition"
-          onClick={() => setShowModal(true)}
-        >
-          <LockKeyhole />
-        </button>
+        {/* Botón de candado (mensaje privado) */}
+        <div className="relative inline-block">
+          {
+             !UserService.isAdmin() ? (
+              <button
+                type="button"
+                className="p-2 text-gray-500 rounded-full hover:bg-gray-100 transition"
+                onClick={() => setShowModal(true)}
+                onMouseEnter={() => setIsTooltipVisible(true)}
+                onMouseLeave={() => setIsTooltipVisible(false)}
+                aria-label="Enviar mensaje privado"
+              >
+                <LockKeyhole />
+              </button>
+            ) : null
+          }
+
+          {/* Tooltip personalizado */}
+          {isTooltipVisible && (
+            <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 p-2 text-white bg-gray-500 rounded-md shadow-lg text-base font-medium">
+              Enviar mensaje privado
+            </div>
+          )}
+
+        </div>
+
 
         {/* Botón para enviar */}
         <button

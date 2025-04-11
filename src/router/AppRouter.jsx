@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import React from "react";
 import LoginPage from "../components/auth/LoginPage";
-import ProfilePage from "../components/userPages/ProfilePage"
+import ProfilePage from "../components/userPages/ProfilePage";
 import Layout from "../layouts/Layout";
 import ErrorPage from "../components/errorPage/ErrorPage";
 import RegisterCampaign from "../components/campaignsPage/pages/RegisterCampaign";
@@ -11,7 +11,15 @@ import Ubicaciones from "../components/ubicaciones/Locations";
 import RecuperarContraseña from "../components/auth/RecuperarContraseña";
 import MyUbications from "../components/ubicaciones/MyLocations";
 import Chat from "../components/chatInbox/Chat";
-import ViewCampaign from "../components/campaignsPage/pages/ViewCampaign"
+import ViewCampaign from "../components/campaignsPage/pages/ViewCampaign";
+import Record from "../components/record/Record";
+import RecordView from "../components/record/RecordView";
+import Donation from "../components/donation/Donation";
+import CampaignEdit from "../components/campaignsPage/pages/CampaignEdit";
+import Usuarios from "../components/usuarios/Usuarios";
+import Register from "../components/auth/Register";
+import ProtectedRoute from "../layouts/ProtectedRoute"; // 👈 Aquí importamos el protector
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,82 +28,145 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: (
-      <Layout>
-        <ProfilePage />
-      </Layout>
-    ), // Con sidebar
+      <ProtectedRoute>
+        <Layout>
+          <ProfilePage />
+        </Layout>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/campaigns",
     element: (
-      <Layout>
-       <CampaignMain />
-      </Layout>
-      )
+
+        <Layout>
+          <CampaignMain />
+        </Layout>
+
+    ),
   },
   {
     path: "/campaigns-register",
     element: (
-      <Layout>
-       <RegisterCampaign />
-      </Layout>
-      )
+      <ProtectedRoute>
+        <Layout>
+          <RegisterCampaign />
+        </Layout>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/editProfile",
     element: (
-      <Layout>
-        <EditProfie />
-      </Layout>
-    ), // Con sidebar
+      <ProtectedRoute>
+        <Layout>
+          <EditProfie />
+        </Layout>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/chat",
     element: (
-      <Layout>
-        <Chat/>
-      </Layout>
-    ), // Con sidebar
+      <ProtectedRoute>
+        <Layout>
+          <Chat />
+        </Layout>
+      </ProtectedRoute>
+    ),
   },
   {
-    path :"/pageError",
-    element: (
-      <ErrorPage/>
-    )
+    path: "/pageError",
+    element: <ErrorPage />,
   },
   {
     path: "/ubicaciones",
     element: (
-      <Layout>
-       <Ubicaciones />
-      </Layout>
-      )
+      <ProtectedRoute>
+        <Layout>
+          <Ubicaciones />
+        </Layout>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/ubicaciones-registrar",
     element: (
-      <Layout>
-       <MyUbications />
-      </Layout>
-      )
+      <ProtectedRoute>
+        <Layout>
+          <MyUbications />
+        </Layout>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/view-campaign",
     element: (
-      <Layout>
-       <ViewCampaign />
-      </Layout>
-      )
+ 
+        <Layout>
+          <ViewCampaign />
+        </Layout>
+
+    ),
+  },
+  {
+    path: "/record",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <Record />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/record/:id",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <RecordView />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/donations",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <Donation />
+        </Layout>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/recuperar-contra",
-    element: (
-     
-       <RecuperarContraseña />
-   
-      )
+    element: <RecuperarContraseña />,
   },
- 
+  {
+    path: "/campaigns-edit/:id",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <CampaignEdit />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/usuarios",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <Usuarios />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/registrar-usuario",
+    element: <Register />,
+  },
 ]);
 
 const AppRouter = () => {

@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
       <div 
         style={{ 
           flex: 1, 
-          padding: "20px", 
+      
           overflowY: "auto", // Hace que el contenido sea desplazable
           height: "100vh" // Hace que el contenido ocupe todo el alto de la ventana
         }}

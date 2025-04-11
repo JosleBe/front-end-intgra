@@ -1,0 +1,10 @@
+/* Estilo para todos los tabs */
+.custom-tabs .ant-tabs-tab {
+    color: black; /* Color de texto cuando no está activo */
+}
+
+/* Estilo para el tab activo */
+.custom-tabs .ant-tabs-tab-active {
+    color: #1890ff; /* Color de texto cuando está activo */
+    font-weight: bold; /* Font weight bold cuando está activo */
+}

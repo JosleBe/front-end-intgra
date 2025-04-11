@@ -20,12 +20,9 @@ const AdminService = {
       throw error;
     }
   },
-  getAllCampaigns: async (token) => {
+  getAllCampaigns: async () => {
     try {
       const response = await axios.get(`${BASE_URL}/campaign`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
       return response.data.data;
     } catch (error) {

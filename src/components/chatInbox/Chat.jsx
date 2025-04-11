@@ -13,6 +13,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [contacts, setContacts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); 
   const user = JSON.parse(localStorage.getItem("profileInfo"));
   const { email } = user;
 
@@ -88,6 +89,11 @@ export default function Chat() {
       ? `${userEmail}_to_${recipientEmail}`
       : `${recipientEmail}_to_${userEmail}`;
   };
+    // Filtrar contactos según el texto de búsqueda
+    const filteredContacts = contacts.filter(contact => 
+      contact.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      contact.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   return (
     <div className="flex h-100 bg-gradient-to-r from-gray-300 to-gray-400">
@@ -97,37 +103,42 @@ export default function Chat() {
           <MessageCircle size={34} fill='black' color='black' />
         </div>
 
-        <form className="flex items-center max-w-sm mx-auto">
+        <form className="flex items-center max-w-sm mx-auto" onSubmit={(e) => e.preventDefault()}>
           <label htmlFor="simple-search" className="sr-only">Search</label>
           <div className="relative w-full">
-            <input type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Buscar contacto..." />
+            <input
+              type="text"
+              id="simple-search"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+              placeholder="Buscar contacto..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // Actualizar el estado de búsqueda
+            />
           </div>
-          <button type="submit" className="p-2.5 ms-2 text-sm font-medium text-white bg-black rounded-lg border">
-            <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-          </button>
         </form>
 
         <ul className="space-y-3">
           <p className="text-lg font-bold text-center mt-2 text-gray-800 tracking-wide">Contactos</p>
-          {contacts.map((contact) => (
-            <li
-              key={contact.email}
-              className={`p-3 cursor-pointer flex items-center gap-2 rounded-lg transition-all duration-300 shadow-sm
-                ${activeChat?.email === contact.email ? "bg-black text-white shadow-md scale-105" : "bg-gray-100 text-gray-800 hover:bg-gray-200"}`}
-              onClick={() => setActiveChat(contact)}
-            >
-              <MessagesSquare size={27} fill='whi' />
-              <div className="flex flex-col">
-                <span className="text-lg font-bold">{contact.nombre}</span>
-                <span className={`text-sm ${activeChat?.email === contact.email ? "text-white" : "text-black"}`}>
-                  {contact.email}
-                </span>
-              </div>
-
-            </li>
-          ))}
+          {filteredContacts.length === 0 ? (
+            <p className="text-center text-gray-500">No se encontraron contactos.</p>
+          ) : (
+            filteredContacts.map((contact) => (
+              <li
+                key={contact.email}
+                className={`p-3 cursor-pointer flex items-center gap-2 rounded-lg transition-all duration-300 shadow-sm
+                  ${activeChat?.email === contact.email ? "bg-black text-white shadow-md scale-105" : "bg-gray-100 text-gray-800 hover:bg-gray-200"}`}
+                onClick={() => setActiveChat(contact)}
+              >
+                <MessagesSquare size={27} fill='whi' />
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold">{contact.nombre}</span>
+                  <span className={`text-sm ${activeChat?.email === contact.email ? "text-white" : "text-black"}`}>
+                    {contact.email}
+                  </span>
+                </div>
+              </li>
+            ))
+          )}
         </ul>
       </div>
 

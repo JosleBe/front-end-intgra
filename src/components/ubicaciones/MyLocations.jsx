@@ -47,7 +47,7 @@ const MyUbications = () => {
     <div>
       <Box Icon sx={{ flex: 1, width: '100%' }}>
         <Box sx={{ px: { xs: 2, md: 6 } }}>
-          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 1 }}>
             {/* Título Campañas */}
             <Box sx={{ flexShrink: 0 }}>
               <Box
@@ -130,15 +130,7 @@ const MyUbications = () => {
       <div className="w-10/12 mx-auto mt-4">
         {/* Título */}
         <div className="flex justify-center items-center mb-4">
-          <div className="relative w-64">
-            <input
-              className="w-full h-10 pl-3 pr-10 text-black bg-white border border-slate-200 rounded shadow-sm focus:outline-none focus:border-slate-400 hover:border-slate-400"
-              placeholder="Buscar ubicación..."
-            />
-            <button className="absolute right-2 top-2 text-slate-600">
-              🔍
-            </button>
-          </div>
+         
         </div>
 
         {/* Tabla de Ubicaciones */}

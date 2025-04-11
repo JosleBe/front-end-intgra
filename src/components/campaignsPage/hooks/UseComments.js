@@ -11,9 +11,7 @@ const useComments = (campaignId) => {
 
     // Cargar comentarios iniciales
     axios.get(`http://localhost:8080/api/campaign/${campaignId}/comments`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+     
     })
     .then(response => {
       setComments(response.data);

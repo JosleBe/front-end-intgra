@@ -9,7 +9,7 @@ import Typography from "@mui/joy/Typography";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import axios from "axios";
-
+import Swal from 'sweetalert2';
 const API_KEY = "AIzaSyDZhoJFtRUBaI9v9YmSYIJ_pMWHGHj2RH0";
 
 const Mapa = ({ searchData }) => {
@@ -17,36 +17,71 @@ const Mapa = ({ searchData }) => {
   const [markerRef, marker] = useAdvancedMarkerRef();
   const [apiData, setApiData] = useState(null);
 
-  const handleRegisterLocation = () => {
-    if (!apiData) {
-      alert("No se ha cargado la información de la ubicación.");
-      return;
-    }
 
-    console.log("Datos enviados:", apiData);
 
-    axios.post("http://localhost:8080/api/location/save", 
-      {
-        address: apiData.formattedAddress,
-        coordinates: apiData.coordinates, // 
-        city: apiData.city,
-        state: apiData.state,
-        country: apiData.country,
-      },  
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        }
-      }
-    ).then((response) => {
-        console.log(response.data);
-        alert("Ubicación registrada correctamente.");
-    }).catch((error) => {
-        console.error("Error al registrar la ubicación:", error);
-        alert("Hubo un error al registrar la ubicación.");
+const handleRegisterLocation = () => {
+  if (!apiData) {
+    Swal.fire({
+      title: 'Sin datos',
+      text: 'No se ha cargado la información de la ubicación.',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar',
     });
+    return;
+  }
+
+  Swal.fire({
+    title: '¿Registrar ubicación?',
+    text: '¿Deseas registrar esta ubicación ahora?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, registrar',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: 'black',
+    cancelButtonColor: 'gray',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios
+        .post(
+          'http://localhost:8080/api/location/save',
+          {
+            address: apiData.formattedAddress,
+            coordinates: apiData.coordinates,
+            city: apiData.city,
+            state: apiData.state,
+            country: apiData.country,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+        .then((response) => {
+          console.log('✅ Ubicación registrada:', response.data);
+          Swal.fire({
+            title: 'Registrado',
+            text: 'La ubicación se registró correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+          }).then(() => {
+            window.location.reload();
+          });
+        })
+        .catch((error) => {
+          console.error('❌ Error al registrar la ubicación:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un error al registrar la ubicación.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+          });
+        });
+    }
+  });
 };
+
 
 useEffect(() => {
   if (!searchData) return;

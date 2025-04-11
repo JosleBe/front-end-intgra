@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import Box from '@mui/joy/Box';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import React, { useState } from 'react';
+import UserService from '../../../service/UserService';
 
 const Navigator = () => {
     const [alignment, setAlignment] = useState("Campañas");
@@ -13,17 +14,17 @@ const Navigator = () => {
 
     const location = useLocation();
     return (
-        <Box sx={{ px: { xs: 2, md: 6 } }}>
+        <Box sx={{ px: { md: 6 } }}>
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 {/* Título Campañas */}
                 <Box sx={{ flexShrink: 0 }}>
                     <Box
                         sx={{
                             position: 'sticky',
-                            top: 0,  // Cambié esto para que siempre sea 0
+                            top: { sm: -100, md: -110 },
                             bgcolor: 'background.body',
-                            zIndex: 9995,  // Se asegura de que el título se quede encima
-                            paddingTop: '20px', // Opcional: si quieres un espacio extra
+                            zIndex: 9995,
+                          
                         }}
                     >
                         <Box sx={{ px: { xs: 2, md: 6 } }}>
@@ -35,7 +36,8 @@ const Navigator = () => {
                 </Box>
 
                 {/* Botones de navegación */}
-                <Box sx={{ width: 'auto' }}>
+                {
+                    UserService.isAdmin() &&  <Box sx={{ width: 'auto' }}>
                     <ToggleButtonGroup
                         value={alignment}
                         exclusive
@@ -91,7 +93,9 @@ const Navigator = () => {
                             </NavLink>
                         </ToggleButton>
                     </ToggleButtonGroup>
-                </Box>
+                </Box>  
+                }
+               
             </Box>
         </Box>
     );

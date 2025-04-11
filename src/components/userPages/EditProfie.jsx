@@ -10,11 +10,8 @@ import Stack from '@mui/joy/Stack';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import Typography from '@mui/joy/Typography';
-import Breadcrumbs from '@mui/joy/Breadcrumbs';
 import { NavLink } from 'react-router-dom';
-import Link from '@mui/joy/Link';
 import Card from '@mui/joy/Card';
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import { useLocation } from 'react-router-dom';
@@ -122,7 +119,7 @@ const EditProfie = () => {
            
             <Box sx={{ flex: 1, width: '100%' }}>
                     <Box sx={{ px: { xs: 2, md: 6 } }}>
-                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 1 }}>
                         {/* Título Campañas */}
                         <Box sx={{ flexShrink: 0 }}>
                             <Box
@@ -153,22 +150,22 @@ const EditProfie = () => {
                                 <ToggleButton
                                     value="web"
                                     sx={{
-                                        bgcolor: location.pathname === '/profile' ? '#896447' : 'transparent', // Fondo personalizado
-                                        color: location.pathname === '/profile' ? 'white' : '#896447', // Texto con color personalizado
+                                        bgcolor: location.pathname === '/profile' ? 'black' : 'transparent', // Fondo personalizado
+                                        color: location.pathname === '/profile' ? 'white' : 'black', // Texto con color personalizado
                                         borderRadius: '20px', // Bordes redondeados
                                         padding: '10px 20px', // Espaciado interno
                                         fontSize: 16,
                                         fontWeight: 500,
                                         textTransform: 'none',
                                         '&:hover': {
-                                            bgcolor: location.pathname === '/profile' ? '#6f4f33' : 'rgba(0, 0, 0, 0.1)', // Fondo más oscuro al hover
+                                            bgcolor: location.pathname === '/profile' ? 'black' : 'rgba(0, 0, 0, 0.1)', // Fondo más oscuro al hover
                                             color: 'white', // Cambiar el color del texto al hacer hover
                                         },
                                         transition: 'all 0.3s ease', // Transición suave
                                     }}
                                 >
                                     <NavLink to="/profile" style={{ textDecoration: 'none' }}>
-                                        <Typography sx={{ color: location.pathname === '/profile' ? 'white' : '#896447' }}>
+                                        <Typography sx={{ color: location.pathname === '/profile' ? 'white' : 'black' }}>
                                             Mi perfil
                                         </Typography>
                                     </NavLink>
@@ -177,22 +174,22 @@ const EditProfie = () => {
                                 <ToggleButton 
                                     value="android"
                                     sx={{
-                                        bgcolor: location.pathname === '/editProfile' ? '#896447' : 'transparent', // Fondo personalizado
-                                        color: location.pathname === '/editProfile' ? 'white' : '#896447', // Texto con color personalizado
+                                        bgcolor: location.pathname === '/editProfile' ? 'black' : 'transparent', // Fondo personalizado
+                                        color: location.pathname === '/editProfile' ? 'white' : 'black', // Texto con color personalizado
                                         borderRadius: '20px', // Bordes redondeados
                                         padding: '10px 20px', // Espaciado interno
                                         fontSize: 16,
                                         fontWeight: 500,
                                         textTransform: 'none',
                                         '&:hover': {
-                                            bgcolor: location.pathname === '/editProfile' ? '#6f4f33' : 'rgba(0, 0, 0, 0.1)', // Fondo más oscuro al hover
+                                            bgcolor: location.pathname === '/editProfile' ? 'black' : 'rgba(0, 0, 0, 0.1)', // Fondo más oscuro al hover
                                             color: 'white', // Cambiar el color del texto al hacer hover
                                         },
                                         transition: 'all 0.3s ease', // Transición suave
                                     }}
                                 >
                                     <NavLink to="/editProfile" style={{ textDecoration: 'none' }}>
-                                        <Typography sx={{ color: location.pathname === '/editProfile' ? 'white' : '#896447' }}>
+                                        <Typography sx={{ color: location.pathname === '/editProfile' ? 'white' : 'black' }}>
                                             Editar perfil
                                         </Typography>
                                     </NavLink>

@@ -64,7 +64,7 @@ function ProfilePage() {
             {token !== " " && token !== null ? (
                 <Box sx={{ flex: 1, width: '100%' }}>
                     <Box sx={{ px: { xs: 2, md: 6 } }}>
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding:1 }}>
                             {/* Título Campañas */}
                             <Box sx={{ flexShrink: 0 }}>
                                 <Box
@@ -95,8 +95,8 @@ function ProfilePage() {
                                     <ToggleButton
                                         value="web"
                                         sx={{
-                                            bgcolor: location.pathname === '/profile' ? '#896447' : 'transparent', // Fondo personalizado
-                                            color: location.pathname === '/profile' ? 'white' : '#896447', // Texto con color personalizado
+                                            bgcolor: location.pathname === '/profile' ? 'black' : 'transparent', // Fondo personalizado
+                                            color: location.pathname === '/profile' ? 'white' : 'black', // Texto con color personalizado
                                             borderRadius: '20px', // Bordes redondeados
                                             padding: '10px 20px', // Espaciado interno
                                             fontSize: 16,
@@ -104,14 +104,14 @@ function ProfilePage() {
                                             textTransform: 'none',
                                             
                                             '&:hover': {
-                                                bgcolor: location.pathname === '/profile' ? '#6f4f33' : 'rgba(0, 0, 0, 0.1)', // Fondo más oscuro al hover
+                                                bgcolor: location.pathname === '/profile' ? 'black' : 'rgba(0, 0, 0, 0.1)', // Fondo más oscuro al hover
                                                 color: 'white', // Cambiar el color del texto al hacer hover
                                             },
                                             transition: 'all 0.3s ease', // Transición suave
                                         }}
                                     >
                                         <NavLink to="/profile" style={{ textDecoration: 'none' }}>
-                                            <Typography sx={{ color: location.pathname === '/profile' ? 'white' : '#896447' }}>
+                                            <Typography sx={{ color: location.pathname === '/profile' ? 'white' : 'black' }}>
                                                 Mi perfil
                                             </Typography>
                                         </NavLink>
@@ -120,22 +120,22 @@ function ProfilePage() {
                                     <ToggleButton
                                         value="android"
                                         sx={{
-                                            bgcolor: location.pathname === '/editProfile' ? '#896447' : 'transparent', // Fondo personalizado
-                                            color: location.pathname === '/editProfile' ? 'white' : '#896447', // Texto con color personalizado
+                                            bgcolor: location.pathname === '/editProfile' ? 'black' : 'transparent', // Fondo personalizado
+                                            color: location.pathname === '/editProfile' ? 'white' : 'black', // Texto con color personalizado
                                             borderRadius: '20px', // Bordes redondeados
                                             padding: '10px 20px', // Espaciado interno
                                             fontSize: 16,
                                             fontWeight: 500,
                                             textTransform: 'none',
                                             '&:hover': {
-                                                bgcolor: location.pathname === '/editProfile' ? '#6f4f33' : 'rgba(0, 0, 0, 0.1)', // Fondo más oscuro al hover
+                                                bgcolor: location.pathname === '/editProfile' ? 'black' : 'rgba(0, 0, 0, 0.1)', // Fondo más oscuro al hover
                                                 color: 'white', // Cambiar el color del texto al hacer hover
                                             },
                                             transition: 'all 0.3s ease', // Transición suave
                                         }}
                                     >
                                         <NavLink to="/editProfile" style={{ textDecoration: 'none' }}>
-                                            <Typography sx={{ color: location.pathname === '/editProfile' ? 'white' : '#896447' }}>
+                                            <Typography sx={{ color: location.pathname === '/editProfile' ? 'white' : 'black' }}>
                                                 Editar perfil
                                             </Typography>
                                         </NavLink>
@@ -158,18 +158,7 @@ function ProfilePage() {
                                 sx={{ display: { xs: 'none', md: 'flex' }, my: 1 }}
                             >
                                 <Stack direction="column" spacing={1}>
-                                    <AspectRatio
-                                        ratio="1"
-                                        maxHeight={300}
-                                        sx={{ flex: 1, minWidth: 160, borderRadius: '100%' }}
-                                    >
-                                        <img
-                                            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
-                                            srcSet="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286&dpr=2 2x"
-                                            loading="lazy"
-                                            alt=""
-                                        />
-                                    </AspectRatio>
+                                   
                                     <IconButton
                                         aria-label="upload new picture"
                                         size="sm"
@@ -225,25 +214,11 @@ function ProfilePage() {
                                     <Input size="md" type="tel" placeholder="Número de teléfono" value={profileInfo.phone} readOnly={true} />
                                 </FormControl>
                                 <FormControl sx={{ flexGrow: 1 }}>
-                                    <FormLabel>Dirección</FormLabel>
-                                    <Input size="md" placeholder="Dirección" value={profileInfo.direccion} readOnly={true} />
-                                </FormControl>
-                            </Stack>
-                            <Stack direction="row" spacing={1}>
-                                <FormControl sx={{ flexGrow: 1 }}>
-                                    <FormLabel>Fecha de nacimiento</FormLabel>
-                                    <Input type="date" name="" id="" value={profileInfo.fechaNacimiento} readOnly={true} />
-                                </FormControl>
-                                <FormControl sx={{ flexGrow: 1 }}>
                                     <FormLabel>Sexo</FormLabel>
-                                    <Select size="md" defaultValue={profileInfo.sexo} value={profileInfo.sexo} readOnly={true}>
-                                        <Option value="">Opcional</Option>
-                                        <Option value="male">Masculino</Option>
-                                        <Option value="female">Femenino</Option>
-                                        <Option value="other">Otro</Option>
-                                    </Select>
+                                    <Input size="md" type="text" placeholder="Sexo" value={profileInfo.sexo == "H" ? "Masculino": "Femenino"} readOnly={true} />
                                 </FormControl>
                             </Stack>
+                           
                         </Card>
                     </Stack>
                     <ChangePassword />

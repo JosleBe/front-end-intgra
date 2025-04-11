@@ -3,47 +3,43 @@ import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { FormControl, FormLabel, Stack } from '@mui/material';
 import { Button, Input, List, message, Modal, Radio } from 'antd';
 import ImagePlantilla from '../../../assets/img/voluntarios.jpg';
 import TextArea from 'antd/es/input/TextArea';
 import Plantillas from '../components/Templates';
 import { Carousel, IconButton } from '@material-tailwind/react';
-import { DeleteOutlined, DollarOutlined, PlusOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { DollarOutlined, ExclamationCircleOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { ChevronLeft, ChevronRight, CircleChevronLeft } from 'lucide-react';
+import { toast } from "react-hot-toast";
 
 import axios from 'axios';
 import Alert from '../components/Alert';
-import Swal from 'sweetalert2';
 const RegisterCampaign = () => {
 
     const [alignment, setAlignment] = useState();
-    const [image, setImage] = useState(ImagePlantilla);  
+    const [image, setImage] = useState(ImagePlantilla);  // Imagen de prueba
     const [categoria, setCategoria] = useState(null);
-    const [nombre, setNombre] = useState("");
-    const [descripcion, setDescripcion] = useState("");
+    const [nombre, setNombre] = useState();
+    const [descripcion, setDescripcion] = useState();
     const [fechaInicio, setFechaInicio] = useState('');
     const [fechaFin, setFechaFin] = useState('');
     const [meta, setMeta] = useState('');
     const [lugar, setLugar] = useState('');
-    const [location, setLocation] = useState([]);
+    const [location, setLocation] = useState([]); 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen2, setIsModalOpen2] = useState(false);
     const [recursoTipo, setRecursoTipo] = useState(null);
     const [cantidad, setCantidad] = useState("");
-    const [articulos, setArticulos] = useState([]);
-    const [articulo, setArticulo] = useState('');
-    const [articuloCantidad, setArticuloCantidad] = useState('');
+
     const [plantillaSeleccionada, setPlantillaSeleccionada] = useState(null);
-    const [estado, setEstado] = useState(true);
     const [error, setError] = useState("");
     const showModal = () => setIsModalOpen(true);
     const showModal2 = () => setIsModalOpen2(true);
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [alertMessage, setAlertMessage] = useState("");
-    const [alertType, setAlertType] = useState("");
-    const [objeto, setObjeto] = useState({});
+  const [alertType, setAlertType] = useState("");
     const img = [
         "/img-camp/img-1.png",
         "/img-camp/img-2.png",
@@ -55,41 +51,8 @@ const RegisterCampaign = () => {
         "/img-camp/img-8.png",
         "/img-camp/img-9.png",
     ]
-    const handleArticuloCantidadChange = (e) => {
-        const value = e.target.value;
-        if (!isNaN(value) && Number(value) > 0) {
-            setArticuloCantidad(value);
-            setError(null);
-        } else {
-            setError("La cantidad debe ser un número mayor a 0");
-        }
-    };
 
-    const categorias = ['Educación Local', 'Alimentación y Vivienda', 'Emergencias Locales', 'Donaciones en Especie ', 'Donaciones Monetarias'];
-    const handleCantidadChange = (e) => {
-        const value = formatCantidad(e.target.value);
-        setCantidad(value);
-        setError(value ? "" : "Ingrese una cantidad válida");
-    };
-    const handleEliminarArticulo = (index) => {
-        const updatedArticulos = articulos.filter((_, i) => i !== index);
-        setArticulos(updatedArticulos);
-        setCantidad(updatedArticulos.reduce((acc, item) => acc + item.cantidad, 0));
-    };
-
-
-    const handleAgregarArticulo = () => {
-        if (articulo.trim() !== '' && articuloCantidad.trim() !== '' && Number(articuloCantidad) > 0) {
-            const updatedArticulos = [...articulos, { nombre: articulo.trim(), cantidad: Number(articuloCantidad) }];
-            setArticulos(updatedArticulos);
-            setCantidad(updatedArticulos.reduce((acc, item) => acc + item.cantidad, 0));
-            setArticulo('');
-            setArticuloCantidad('');
-            setError(null);
-        } else {
-            setError("Ingrese un nombre válido y una cantidad positiva");
-        }
-    };
+    const categorias = ['Moderna', 'Clásica', 'Tecnológica', 'Solidaria', 'Deportiva'];
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -113,18 +76,10 @@ const RegisterCampaign = () => {
         fetchLocations();
     }, [])
     console.log(error)
-    const showAlert = (message, icon) => {
-        Swal.fire({
-            title: icon === 'error' ? '¡Error!' : 'Éxito',
-            text: message,
-            icon: icon,
-            confirmButtonText: 'Aceptar',
-        });
-    };
     const handleRegister = async () => {
         console.log("Iniciando registro...");
     
-        // Validaciones con SweetAlert
+        // Validaciones
         if (!nombre.trim()) return showAlert("El nombre de la campaña es obligatorio.", "error");
         if (!descripcion.trim()) return showAlert("La descripción no puede estar vacía.", "error");
         if (!fechaInicio || !fechaFin) return showAlert("Las fechas de inicio y fin son obligatorias.", "error");
@@ -132,10 +87,10 @@ const RegisterCampaign = () => {
         const fechaInicioDate = new Date(fechaInicio);
         const fechaFinDate = new Date(fechaFin);
         if (isNaN(fechaInicioDate.getTime()) || isNaN(fechaFinDate.getTime())) {
-            return showAlert("Las fechas deben ser válidas.", "error");
+          return showAlert("Las fechas deben ser válidas.", "error");
         }
         if (fechaInicioDate >= fechaFinDate) {
-            return showAlert("La fecha de inicio debe ser menor que la fecha de fin.", "error");
+          return showAlert("La fecha de inicio debe ser menor que la fecha de fin.", "error");
         }
     
         if (!image) return showAlert("La imagen es obligatoria.", "error");
@@ -146,70 +101,77 @@ const RegisterCampaign = () => {
     
         // Objeto de datos a enviar
         const data = {
-            nombre,
-            descripcion,
-            fechaInicio,
-            fechaFin,
-            meta: Number(meta),
-            lugar,
-            location: selectedLocation,
-            recursoTipo,
-            cantidad,
-            plantillaSeleccionada,
-            categoria,
-            image,
-            objeto,
-            estado
+          nombre,
+          descripcion,
+          fechaInicio,
+          fechaFin,
+          meta: Number(meta),
+          lugar,
+          location: selectedLocation,
+          recursoTipo,
+          cantidad,
+          plantillaSeleccionada,
+          categoria,
+          image,
         };
     
         console.log("Datos a enviar:", data);
     
         try {
-            const response = await axios.post("http://localhost:8080/api/campaign/register", data, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                }
-            });
-    
-            console.log("Respuesta del servidor:", response);
-    
-            if (response.status === 201) {
-                showAlert("🎉 Campaña registrada correctamente.", "success");
-    
-                // Resetear los campos
-                setNombre("");
-                setDescripcion("");
-                setFechaInicio("");
-                setFechaFin("");
-                setMeta("");
-                setLugar("");
-                setSelectedLocation(null);
-                setRecursoTipo(null);
-                setCantidad("");
-                setPlantillaSeleccionada(null);
-                setImage(ImagePlantilla);
-                setCategoria("");
+          const response = await axios.post("http://localhost:8080/api/campaign/register", data, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem("token")}`
             }
+          });
+    
+          console.log("Respuesta del servidor:", response);
+    
+          if (response.status === 201) {
+            showAlert("🎉 Campaña registrada correctamente.", "success");
+    
+            // Resetear los campos
+            setNombre("");
+            setDescripcion("");
+            setFechaInicio("");
+            setFechaFin("");
+            setMeta("");
+            setLugar("");
+            setSelectedLocation(null);
+            setRecursoTipo(null);
+            setCantidad("");
+            setPlantillaSeleccionada(null);
+            setImage(ImagePlantilla);
+            setCategoria("");
+          }
         } catch (error) {
-            console.error("Error al registrar la campaña:", error);
-            showAlert("❌ Hubo un problema al registrar la campaña.", "error");
+          console.error("Error al registrar la campaña:", error);
+          showAlert("❌ Hubo un problema al registrar la campaña.", "error");
         }
-    };
-
-
+      };
+    
+      // Función para mostrar alertas
+      const showAlert = (message, type) => {
+        setAlertMessage(message);
+        setAlertType(type);
+      };    
+    
 
     const handleCancel = () => {
-        setIsModalOpen(false);
-        setCantidad("");
-        setMeta("");
-        setRecursoTipo(null);
-        setError("");
-        setArticulos([]);
+            setIsModalOpen(false);
+            setCantidad("");
+            setMeta("");
+            setRecursoTipo(null);
+            setError("");
     };
+    const handleCancel2 = () => {
+        setIsModalOpen2(false);
+        setSelectedLocation("");
+        setError("");
+    }
+
     const formatCantidad = (value) => {
         if (recursoTipo === "monetario") {
-
             return value
                 .replace(/[^0-9.]/g, "") // Solo permite números y puntos
                 .replace(/(\..*)\./g, "$1") // Evita más de un punto decimal
@@ -218,58 +180,39 @@ const RegisterCampaign = () => {
         return value.replace(/\D/g, ""); // Solo permite números enteros para insumos
     };
 
-    const handleConfirmar = () => {
-
-        console.log({ tipo: recursoTipo, cantidad, articulos });
-        handleConfirm(recursoTipo, cantidad, articulos);
-        handleCancel();
+    const handleCantidadChange = (e) => {
+        const value = formatCantidad(e.target.value);
+        setCantidad(value);
+        setError(value ? "" : "Ingrese una cantidad válida");
     };
 
-    const handleConfirm = (tipo, cantidad, articulos) => {
-        if (!tipo || (tipo === "monetario" && (!cantidad || Number(cantidad) <= 0))) return;
+    const handleConfirm = () => {
+        if (!recursoTipo || !cantidad || error) return;
 
-        setMeta(`${cantidad} ${tipo === "insumo" ? "📦 artículos" : "💲"}`);
-        setObjeto({ tipo, cantidad, articulos });
+        setMeta(`${cantidad} ${recursoTipo === "insumo" ? "📦 artículos" : "💲"}`);
+
         setIsModalOpen(false);
         setError("");
         message.success("Recurso guardado correctamente");
-
-        console.log({ tipo, cantidad, articulos, totalArticulos }); // Para depuración
     };
 
-    const handleCancel2 = () => {
-        setIsModalOpen2(false);
-        setSelectedLocation("");
-        setError("");
 
-    }
     const handleConfirm2 = () => {
         setIsModalOpen2(false);
         console.log(selectedLocation)
     }
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
-    
-        if (!file) return;
-    
-        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
-    
-        if (!validImageTypes.includes(file.type)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Archivo no válido',
-                text: 'Solo se permiten imágenes en formato JPG, PNG, GIF, SVG o WEBP.'
-            });
-            return;
+        if (file) {
+            // Crear un FileReader para convertir el archivo en base64
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64Image = reader.result; // Este es el string base64 de la imagen
+                setImage(base64Image);  // Asumiendo que tienes un estado `image` donde almacenar la imagen
+                console.log(base64Image); // Aquí puedes ver el resultado en base64
+            };
+            reader.readAsDataURL(file);  // Esto convierte el archivo a base64
         }
-    
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const base64Image = reader.result;
-            setImage(base64Image);  // Guarda la imagen en base64 en el estado
-            console.log(base64Image);  // Puedes quitar esto si ya no necesitas verlo en consola
-        };
-        reader.readAsDataURL(file); // Convierte el archivo en base64
     };
     const handleChange = (event, newAlignment) => {
         setAlignment(newAlignment);
@@ -279,12 +222,11 @@ const RegisterCampaign = () => {
         setImage(selectedImage);  // Actualiza la imagen seleccionada
     };
 
-
     return (
         <div>
-            <Box sx={{ flex: 1, width: '100%', position: 'sticky', top: 0, zIndex: 9999, bgcolor: 'background.body' }}>
+            <Box sx={{ flex: 1, width: '100%' }}>
                 <Box sx={{ px: { xs: 2, md: 6 } }}>
-                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 1 }}>
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box sx={{ flexShrink: 0 }}>
                             <Box
                                 sx={{
@@ -337,8 +279,8 @@ const RegisterCampaign = () => {
                                 <ToggleButton
                                     value="android"
                                     sx={{
-                                        bgcolor: location.pathname === '/campaigns-register' ? 'black' : 'black',
-                                        color: location.pathname === '/campaigns-register' ? 'white' : 'white',
+                                        bgcolor: location.pathname === '/campaigns-register' ? 'black' : 'transparent',
+                                        color: location.pathname === '/campaigns-register' ? 'white' : 'black',
                                         borderRadius: '20px',
                                         padding: '10px 20px',
                                         fontSize: 16,
@@ -352,7 +294,7 @@ const RegisterCampaign = () => {
                                     }}
                                 >
                                     <NavLink to="/campaigns-register" style={{ textDecoration: 'none' }}>
-                                        <Typography sx={{ color: location.pathname === '/campaigns-register' ? 'black' : 'white' }}>
+                                        <Typography sx={{ color: location.pathname === '/campaigns-register' ? 'white' : 'black' }}>
                                             Registrar campañas
                                         </Typography>
                                     </NavLink>
@@ -364,8 +306,8 @@ const RegisterCampaign = () => {
             </Box>
 
             <Stack className="flex flex-row w-full p-6 space-x-3">
-                <div className="w-96 h-2/4 bg-white p-6 shadow-lg rounded-xl">
-                    <form onSubmit={handleSubmit} className="space-y-2">
+                <div className="w-96 bg-white p-6 shadow-lg rounded-xl">
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="flex items-center justify-center w-full">
                             <label
                                 htmlFor="dropzone-file"
@@ -396,7 +338,6 @@ const RegisterCampaign = () => {
                                     id="dropzone-file"
                                     type="file"
                                     className="hidden"
-                                     accept="image/*"
                                     onChange={handleImageUpload}
                                 />
                             </label>
@@ -407,7 +348,7 @@ const RegisterCampaign = () => {
                             <Input
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
-                                
+                                x
                             />
                         </FormControl>
 
@@ -444,7 +385,6 @@ const RegisterCampaign = () => {
 
                                 <Input
                                     type="button"
-                                    style={{ backgroundColor: 'gray', color: 'white', fontWeight: 'bold', fontSize: 15 }}
                                     onClick={showModal}
                                     value={"Recurso"}
 
@@ -454,7 +394,7 @@ const RegisterCampaign = () => {
                                 <Input
                                     type="button"
                                     onClick={showModal2}
-                                    style={{ backgroundColor: 'gray', color: 'white', fontWeight: 'bold', fontSize: 15 }}
+
                                     value="Ubicacion"
                                 />
                             </FormControl>
@@ -543,31 +483,22 @@ const RegisterCampaign = () => {
                         {/* Selección de categorías */}
                         <div className="flex-1 m">
                             <h2 style={{ fontSize: 19, fontWeight: 'bold' }} className="text-center w-full mb-4">Selecciona una categoría</h2>
-                            <div className="flex flex-wrap justify-center mt-6 items-start gap-2">
-                                {categorias.reduce((acc, cate, index) => {
-                                    if (index % 2 === 0) {
-                                        acc.push(categorias.slice(index, index + 2)); // Agrupar dos elementos
-                                    }
-                                    return acc;
-                                }, []).map((pair, index) => (
-                                    <div key={index} className="flex gap-2">
-                                        {pair.map((cate) => (
-                                            <Button
-                                                key={cate}
-                                                onClick={() => setCategoria(cate)}
-                                                style={{
-                                                    backgroundColor: categoria === cate ? 'black' : 'transparent',
-                                                    color: categoria === cate ? 'white' : 'black',
-                                                    borderRadius: '20px',
-                                                    padding: '10px 20px',
-                                                    fontSize: 17,
-                                                    transition: 'all 0.3s ease',
-                                                }}
-                                            >
-                                                {cate}
-                                            </Button>
-                                        ))}
-                                    </div>
+                            <div className="flex flex-wrap justify-center mt-8 items-center gap-3">
+                                {categorias.map((cate) => (
+                                    <Button
+                                        key={cate}
+                                        onClick={() => setCategoria(cate)}
+                                        style={{
+                                            backgroundColor: categoria === cate ? 'black' : 'transparent',
+                                            color: categoria === cate ? 'white' : 'black',
+                                            borderRadius: '20px',
+                                            padding: '10px 20px',
+                                            fontSize: 17,
+                                            transition: 'all 0.3s ease',
+                                        }}
+                                    >
+                                        {cate}
+                                    </Button>
                                 ))}
                             </div>
                         </div>
@@ -591,34 +522,27 @@ const RegisterCampaign = () => {
                     footer={null}
                     centered
                 >
+                    {/* Selección de tipo de recurso */}
                     <div className="flex justify-center gap-4">
                         <Radio.Group
                             onChange={(e) => setRecursoTipo(e.target.value)}
                             value={recursoTipo}
                             className="flex gap-4"
                         >
-                            <Radio.Button
-                                value="insumo"
-                                className="flex items-center gap-2 p-2"
-                                disabled={recursoTipo === "monetario"} // Deshabilita si ya eligió "monetario"
-                            >
+                            <Radio.Button value="insumo" className="flex items-center gap-2 p-2">
                                 <ShoppingCartOutlined className="text-lg" /> Insumo
                             </Radio.Button>
-
-                            <Radio.Button
-                                value="monetario"
-                                className="flex items-center gap-2 p-2"
-                                disabled={recursoTipo === "insumo"} // Deshabilita si ya eligió "insumo"
-                            >
+                            <Radio.Button value="monetario" className="flex items-center gap-2 p-2">
                                 <DollarOutlined className="text-lg" /> Monetario
                             </Radio.Button>
                         </Radio.Group>
                     </div>
 
-                    {recursoTipo && recursoTipo === "monetario" && (
+                    {/* Captura de cantidad */}
+                    {recursoTipo && (
                         <div style={{ marginTop: 20 }}>
                             <label style={{ fontWeight: "bold", fontSize: "14px", display: "block" }}>
-                                Cantidad en pesos
+                                {recursoTipo === "insumo" ? "Cantidad de artículos" : "Cantidad en pesos"}
                             </label>
                             <Input
                                 type="text"
@@ -629,60 +553,22 @@ const RegisterCampaign = () => {
                             />
                             {error && (
                                 <div className="text-red-500 flex items-center gap-2 mt-1">
+                                    <ExclamationCircleOutlined />
                                     <span>{error}</span>
                                 </div>
                             )}
                         </div>
                     )}
 
-                    {recursoTipo === "insumo" && (
-                        <div style={{ marginTop: 20 }}>
-                            <label style={{ fontWeight: "bold", fontSize: "14px", display: "block" }}>
-                                Lista de artículos requeridos
-                            </label>
-                            <div className="flex gap-2 mt-2">
-                                <Input
-                                    type="text"
-                                    value={articulo}
-                                    onChange={(e) => setArticulo(e.target.value)}
-                                    placeholder="Ejemplo: Lápices, Papel..."
-                                />
-                                <Input
-                                    type="number"
-                                    value={articuloCantidad}
-                                    onChange={handleArticuloCantidadChange}
-                                    placeholder="Cantidad"
-                                    style={{ width: '80px' }}
-                                />
-                                <Button style={{backgroundColor: '#b0b0b0', color: 'white'}} type="dashed" icon={<PlusOutlined />} onClick={handleAgregarArticulo}>
-                                    Agregar
-                                </Button>
-                            </div>
-                            <List
-                                bordered
-                                dataSource={articulos}
-                                renderItem={(item, index) => (
-                                    <List.Item>
-                                        {`${item.nombre} - Cantidad: ${item.cantidad}`}
-                                        <Button type="link" icon={<DeleteOutlined />} onClick={() => handleEliminarArticulo(index)}>
-                                            Eliminar
-                                        </Button>
-                                    </List.Item>
-                                )}
-                                className="mt-2"
-                            />
-                            <p className="mt-2 font-bold">Total de artículos: {cantidad}</p>
-                        </div>
-                    )}
-
+                    {/* Botones */}
                     <div className="flex justify-end gap-2 mt-5">
                         <Button type="link" onClick={handleCancel} style={{ color: "black" }}>
                             Cancelar
                         </Button>
                         <Button
                             type="primary"
-                            onClick={handleConfirmar}
-                            disabled={!recursoTipo || (recursoTipo === "monetario" && (!cantidad || Number(cantidad) <= 0))}
+                            onClick={handleConfirm}
+                            disabled={!recursoTipo || !cantidad || error}
                             style={{ backgroundColor: "black", color: "white" }}
                         >
                             Confirmar

@@ -73,7 +73,7 @@ const Ubicaciones = () => {
     <div>
       <Box sx={{ flex: 1, width: '100%' }}>
         <Box sx={{ px: { xs: 2, md: 6 } }}>
-          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 1}}>
             {/* Título Campañas */}
             <Box sx={{ flexShrink: 0 }}>
               <Box
@@ -120,7 +120,7 @@ const Ubicaciones = () => {
                 >
                   <NavLink to="/campaigns" style={{ textDecoration: 'none' }}>
                     <Typography sx={{ color: location.pathname === '/ubicaciones' ? 'white' : 'black' }}>
-                     Registro de ubicaciones
+                      Registro de ubicaciones
                     </Typography>
                   </NavLink>
                 </ToggleButton>
@@ -153,141 +153,141 @@ const Ubicaciones = () => {
           </Box>
         </Box>
       </Box>
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center", flexDirection: 'column', alignItems: 'center', pt: 5 }}>
-      <Box sx={{ width: "100%", maxWidth: 1300, p: 2, height: 700 }}>
-        <Box sx={{ display: "flex", gap: 3, background: '#FFF', p: 3, boxShadow: 3, borderRadius: "lg" }}>
-          {/* Contenedor de los Inputs - Siempre ocupa el 50% */}
-          <Box sx={{ width: "40%", minWidth: "400px", display: "flex", flexDirection: "column", gap: 2 }}>
-            <Box sx={{ bgcolor: "background.level3", p: 2, borderRadius: "sm", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
-              <Typography level="body2" sx={{ fontWeight: "bolder", fontSize: 18 }}>
-                Agregar nueva ubicación
-              </Typography>
-              <Typography level="body2" sx={{ fontSize: 14, color: "text.secondary" }}>
-                Ingresa el estado, municipio y colonia, e ingresa la calle y número. Verifica la ubicación en el mapa y regístrala si es correcta.
-              </Typography>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center", flexDirection: 'column', alignItems: 'center', }}>
+        <Box sx={{ width: "100%", maxWidth: 1300, p: 2, height: 500 }}>
+          <Box sx={{ display: "flex", gap: 3, background: '#FFF', p: 3, boxShadow: 3, borderRadius: "lg" }}>
+            {/* Contenedor de los Inputs - Siempre ocupa el 50% */}
+            <Box sx={{ width: "40%", minWidth: "400px", display: "flex", flexDirection: "column", gap: 2 }}>
+              <Box sx={{ bgcolor: "background.level3", p: 2, borderRadius: "sm", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+                <Typography level="body2" sx={{ fontWeight: "bolder", fontSize: 18 }}>
+                  Agregar nueva ubicación
+                </Typography>
+                <Typography level="body2" sx={{ fontSize: 14, color: "text.secondary" }}>
+                  Ingresa el estado, municipio y colonia, e ingresa la calle y número. Verifica la ubicación en el mapa y regístrala si es correcta.
+                </Typography>
+              </Box>
+
+              <FormControl fullWidth>
+                <FormLabel>Estado</FormLabel>
+                <Autocomplete
+                  options={estados}
+                  getOptionLabel={(option) => option.nombre}
+                  value={selectedEstado}
+                  onChange={(_, newValue) => setSelectedEstado(newValue)}
+                  renderInput={(params) => <TextField {...params} variant="outlined" size="small" placeholder="Selecciona un estado" />}
+                  sx={{
+                    "& .MuiInputBase-root": { borderRadius: 2, boxShadow: 1 },
+                    "& .MuiAutocomplete-popupIndicator": { display: "none" },
+                  }}
+                />
+              </FormControl>
+
+              {selectedEstado && (
+                <FormControl fullWidth>
+                  <FormLabel>Municipio</FormLabel>
+                  <Autocomplete
+                    options={municipios}
+                    getOptionLabel={(option) => option.nombre}
+                    value={selectedMunicipio}
+                    onChange={(_, newValue) => setSelectedMunicipio(newValue)}
+                    renderInput={(params) => <TextField {...params} variant="outlined" size="small" placeholder="Selecciona un municipio" />}
+                    sx={{
+                      "& .MuiInputBase-root": { borderRadius: 2, boxShadow: 1 },
+                      "& .MuiAutocomplete-popupIndicator": { display: "none" },
+                    }}
+                  />
+                </FormControl>
+              )}
+
+              {selectedMunicipio && (
+                <FormControl fullWidth>
+                  <FormLabel>Colonia</FormLabel>
+                  <Autocomplete
+                    options={colonias}
+                    getOptionLabel={(option) => option.nombre}
+                    value={selectedColonia}
+                    onChange={(_, newValue) => setSelectedColonia(newValue)}
+                    renderInput={(params) => <TextField {...params} variant="outlined" size="small" placeholder="Selecciona una colonia" />}
+                    sx={{
+                      "& .MuiInputBase-root": { borderRadius: 2, boxShadow: 1 },
+                      "& .MuiAutocomplete-popupIndicator": { display: "none" },
+                    }}
+                  />
+                </FormControl>
+              )}
+
+              <Stack direction="row" spacing={1}>
+                <FormControl fullWidth>
+                  <FormLabel>Calle/Número</FormLabel>
+                  <TextField
+                    size="small"
+                    placeholder="Ej. calle 2 numero 43"
+                    onChange={(e) => setSearchData({ ...searchData, street: e.target.value })}
+                    sx={{
+                      borderRadius: 2,
+                      boxShadow: 1,
+                    }}
+                  />
+                </FormControl>
+              </Stack>
+
+              <Button
+                variant="solid"
+                sx={{
+                  backgroundColor: 'black',
+                  color: 'white',
+                  fontSize: '15px',
+                  fontWeight: 'bold',
+                  borderRadius: '8px',
+                  "&:hover": { backgroundColor: '#556b2f' },
+                  transition: 'all 0.3s ease',
+                }}
+                onClick={handleSearch}
+              >
+                Buscar
+              </Button>
             </Box>
 
-            <FormControl fullWidth>
-              <FormLabel>Estado</FormLabel>
-              <Autocomplete
-                options={estados}
-                getOptionLabel={(option) => option.nombre}
-                value={selectedEstado}
-                onChange={(_, newValue) => setSelectedEstado(newValue)}
-                renderInput={(params) => <TextField {...params} variant="outlined" size="small" placeholder="Selecciona un estado" />}
-                sx={{
-                  "& .MuiInputBase-root": { borderRadius: 2, boxShadow: 1 },
-                  "& .MuiAutocomplete-popupIndicator": { display: "none" },
-                }}
-              />
-            </FormControl>
-
-            {selectedEstado && (
-              <FormControl fullWidth>
-                <FormLabel>Municipio</FormLabel>
-                <Autocomplete
-                  options={municipios}
-                  getOptionLabel={(option) => option.nombre}
-                  value={selectedMunicipio}
-                  onChange={(_, newValue) => setSelectedMunicipio(newValue)}
-                  renderInput={(params) => <TextField {...params} variant="outlined" size="small" placeholder="Selecciona un municipio" />}
-                  sx={{
-                    "& .MuiInputBase-root": { borderRadius: 2, boxShadow: 1 },
-                    "& .MuiAutocomplete-popupIndicator": { display: "none" },
-                  }}
-                />
-              </FormControl>
-            )}
-
-            {selectedMunicipio && (
-              <FormControl fullWidth>
-                <FormLabel>Colonia</FormLabel>
-                <Autocomplete
-                  options={colonias}
-                  getOptionLabel={(option) => option.nombre}
-                  value={selectedColonia}
-                  onChange={(_, newValue) => setSelectedColonia(newValue)}
-                  renderInput={(params) => <TextField {...params} variant="outlined" size="small" placeholder="Selecciona una colonia" />}
-                  sx={{
-                    "& .MuiInputBase-root": { borderRadius: 2, boxShadow: 1 },
-                    "& .MuiAutocomplete-popupIndicator": { display: "none" },
-                  }}
-                />
-              </FormControl>
-            )}
-
-            <Stack direction="row" spacing={1}>
-              <FormControl fullWidth>
-                <FormLabel>Calle/Número</FormLabel>
-                <TextField
-                  size="small"
-                  placeholder="Ej. calle 2 numero 43"
-                  onChange={(e) => setSearchData({ ...searchData, street: e.target.value })}
-                  sx={{
-                    borderRadius: 2,
-                    boxShadow: 1,
-                  }}
-                />
-              </FormControl>
-            </Stack>
-
-            <Button
-              variant="solid"
+            {/* Contenedor elegante para el Mapa o Imagen */}
+            <Box
               sx={{
-                backgroundColor: 'black',
-                color: 'white',
-                fontSize: '15px',
-                fontWeight: 'bold',
-                borderRadius: '8px',
-                "&:hover": { backgroundColor: '#556b2f' },
-                transition: 'all 0.3s ease',
+                width: "60%",
+                minWidth: "400px",
+                background: '#FFF',
+                height: "440px",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "relative",
+                overflow: "hidden",
               }}
-              onClick={handleSearch}
             >
-              Buscar
-            </Button>
-          </Box>
-
-         {/* Contenedor elegante para el Mapa o Imagen */}
-         <Box
-            sx={{
-              width: "60%",
-              minWidth: "400px",
-              background: '#FFF',
-              height: "440px",
-              borderRadius: "12px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
-              overflow: "hidden",
-            }}
-          >
-            {showData ? (
-              <Mapa searchData={searchData} />
-            ) : (
-              <div style={{ textAlign: "center" }}>
-                <Typography sx={{ fontWeight: "700", fontSize: "20px", marginBottom: 2, color: "#444" }}>
-                  Encuentra nuevas ubicaciones
-                </Typography>
-                <img
-                  src={Buscar}
-                  alt="Buscar ubicación"
-                  style={{
-                    width: '50%',
-                    height: 'auto',
-                    margin: '0 auto',
-                    objectFit: "contain", // Ajustar la imagen sin deformarla
-                    borderRadius: "12px",
-                  }}
-                />
-              </div>
-            )}
+              {showData ? (
+                <Mapa searchData={searchData} />
+              ) : (
+                <div style={{ textAlign: "center" }}>
+                  <Typography sx={{ fontWeight: "700", fontSize: "20px", marginBottom: 2, color: "#444" }}>
+                    Encuentra nuevas ubicaciones
+                  </Typography>
+                  <img
+                    src={Buscar}
+                    alt="Buscar ubicación"
+                    style={{
+                      width: '50%',
+                      height: 'auto',
+                      margin: '0 auto',
+                      objectFit: "contain", // Ajustar la imagen sin deformarla
+                      borderRadius: "12px",
+                    }}
+                  />
+                </div>
+              )}
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
     </div>
 
   );

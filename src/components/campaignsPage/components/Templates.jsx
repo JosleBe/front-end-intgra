@@ -3,58 +3,39 @@ import { Typography, Button } from "@material-tailwind/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Lista de todas las campañas sin categorizar
 const plantillas = [
     {
         nombre: "Moderna Azul",
         codigo: "001",
         categoria: "Moderna",
         componente: ({ titulo, descripcion, imagen, categoria}) => (
-            <div className=" bg-white shadow-md rounded-lg overflow-hidden flex flex-col relative">
-                {/* Categoría sobre la imagen */}
-                <div className="absolute top-44 left-2 px-3 py-1 bg-gray-800 text-white text-xs rounded-full transform rotate-0 z-10">
-                    {`Categoría: ${categoria}`}
+            <div className={`bg-white shadow-md rounded-lg overflow-hidden flex flex-col relative h-80`}>
+            {/* Imagen con categoría sobrepuesta */}
+            <div className="relative w-full h-40">
+                <img
+                    src={imagen}
+                    alt={titulo}
+                    className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 left-3 bg-gray-900 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md">
+                    {categoria}
                 </div>
+            </div>
 
-                {/* Titulo en el fondo negro */}
-                <div className="bg-black text-white text-center py-2" style={{ minHeight: '50px', overflow: 'auto' }}>
-                    <Typography
-                        variant="h5"
-                        className="font-bold text-ellipsis w-full"
-                        style={{
-                            whiteSpace: 'normal', // Permite que el texto se ajuste a múltiples líneas
-                            textOverflow: 'ellipsis', // Muestra '...' si el texto es demasiado largo
-                            overflow: 'hidden', // Oculta el texto que excede el contenedor
-                            maxHeight: '3rem', overflowY: 'auto'
-                        }}
-                    >
-                        {titulo}
-                    </Typography>
-                </div>
+            {/* Contenido */}
+            <div className="p-2 flex flex-col flex-grow overflow-hidden">
+                {/* Título */}
+                <h3  className="text-lg font-bold text-gray-900 text-center mb-2 line-clamp-2 ">
+                    {titulo}
+                </h3>
 
-                {/* Imagen */}
-                <div className="relative w-full h-40">
-                    <img
-                        src={imagen}
-                        alt={titulo}
-                        className="w-full h-full object-cover"
-                    />
-                </div>
-
-                {/* Descripción y Botón */}
-                <div className="p-2 flex flex-col justify-between flex-grow">
-                    {descripcion && (
-                        <div className="w-full" style={{ maxHeight: '4rem', overflowY: 'auto' }}>
-                            <p color="gray" style={{ width: 255, wordWrap: "break-word" }}>
-                                {descripcion}
-                            </p>
-                        </div>
-                    )}
-                    <div className="mt-4 flex justify-center">
-                        <Button size="sm" color="black" style={{ background: 'black', color: 'black' }} className="rounded-full">
-                            Ver Más
-                        </Button>
+                {/* Descripción con altura fija y recorte de texto */}
+                {descripcion && (
+                    <div className="text-gray-700 text-base text-center mb-2 h-16 text-ellipsis">
+                        <p className="line-clamp-3">{descripcion}</p>
                     </div>
+                )}  
+                   
 
                 </div>
             </div>
@@ -65,70 +46,37 @@ const plantillas = [
         categoria: "Moderna",
         codigo: "002",
         componente: ({ titulo, descripcion, imagen, categoria }) => (
-            <div className=" bg-white shadow-md rounded-lg overflow-hidden flex flex-col">
-                {/* Contenedor de la imagen */}
-                <div className="relative w-full h-40 ">
-                    <img
-                        src={imagen}
-                        alt={titulo}
-                        className="w-full h-full object-cover rounded-t-lg"
-                    />
-                    {/* Título centrado sobre la imagen */}
-                    <div className="absolute inset-0 flex justify-center items-center">
-                        <Typography
-                            variant="h5"
-                            color="blue-gray"
-                            className="font-bold text-center text-white"
-                            style={{
-                                whiteSpace: 'normal', // Permitir que el texto se ajuste y se mueva a la siguiente línea
-                                textOverflow: 'ellipsis',
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente para mayor legibilidad
-                                padding: '0.5rem',
-                                borderRadius: '0.25rem',
-                                width: '90%', // Mantener el ancho del contenedor
-                                wordWrap: 'break-word', // Asegurarse de que las palabras largas se rompan
-                                overflow: 'hidden', // Ocultar el desbordamiento
-                                display: 'block',
-                                maxHeight: '4rem',
-                                overflowY: 'auto'
-                            }}
-                        >
-                            {titulo}
-                        </Typography>
-                    </div>
+           
+            <div className={`bg-white shadow-md rounded-lg overflow-hidden flex flex-col relative h-80`}>
+            {/* Imagen con overlay de degradado */}
+            <div className="relative w-full h-40">
+                <img
+                    src={imagen}
+                    alt={titulo}
+                    className="w-full h-40 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <div className="absolute top-3 left-3 bg-black text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md">
+                    {categoria}
                 </div>
+            </div>
 
-                {/* Descripción */}
-                <div className="p-2 flex flex-col justify-between flex-grow">
-                    {descripcion && (
-                        <div className="w-full" style={{ maxHeight: '4rem', overflowY: 'auto' }}>
-                            <p style={{ wordWrap: "break-word", color: 'gray' }}>
-                                {descripcion}
-                            </p>
-                        </div>
-                    )}
+            {/* Contenido */}
+            <div className="p-2 flex flex-col flex-grow overflow-hidden">
+                {/* Título destacado */}
+                <h3 sty className="text-lg font-bold text-gray-900 text-center mb-2 bg-blue-100 px-4 py-1 rounded-lg text-ellipsis line-clamp-1      shadow-sm ">
+                    {titulo}
+                </h3>
 
-                    {/* Categoría creativa (debajo de la descripción) */}
-                    <div className="w-full text-center mt-4 mb-2">
-                        <Typography
-                            variant="h6"
-                            className="font-bold text-nowrap h-6 p-1    bg-black text-white text-xs rounded-full transform rotate-0 z-10 "
-                            style={{
-                                fontStyle: 'inherit', // Estilo cursiva para un toque distintivo
-                                fontSize: 18
-
-                            }}
-                        >
-                           {categoria}
-                        </Typography>
+                {/* Descripción con diseño elegante */}
+                {descripcion && (
+                    <div className="text-gray-700 text-sm text-center mb-2 h-16 overflow-hidden text-ellipsis">
+                        <p className="line-clamp-3 text-gray-600 italic">{descripcion}</p>
                     </div>
+                )}
 
-                    {/* Botón "Leer más" */}
-                    <div className="mt-4 flex justify-center">
-                        <Button size="sm" color="blue-gray" className="rounded-full">
-                            Ver Más
-                        </Button>
-                    </div>
+                   
+
                 </div>
             </div>
 
