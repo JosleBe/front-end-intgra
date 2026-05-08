@@ -2,11 +2,12 @@
   height: 100vh;
   width: 100vw;
   display: flex;
+  background: radial-gradient(circle at top, #fff8f3 0%, #f4efe9 60%, #efe8e2 100%);
 }
 
 .content-left {
   flex: 1;
-  background-color: #896447;
+  background: linear-gradient(180deg, #8c6648 0%, #7a573d 100%);
   padding-top: 70px;
   position: relative;
 }
@@ -14,14 +15,16 @@
 .content {
   background-color: white;
   height: 100%;
-  border-radius: 380px 5px 0;
+  border-radius: 380px 12px 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
 .content > img{
-  border-radius:20px;
+  border-radius: 24px;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.15);
 }
 #img-login{
   margin-top: 110px;
@@ -39,7 +42,7 @@ height: 220px;
   display: flex;
   justify-content: center;
   align-items: start;
-  background-color: #896447;
+  background: linear-gradient(180deg, #8c6648 0%, #7a573d 100%);
 
 }
 
@@ -48,21 +51,25 @@ height: 220px;
   height: 500px;
   background: white;
   margin-top: 70px;
-  border-radius: 20px;
+  border-radius: 24px;
   margin-right: 20px;
   padding-bottom: 50px;
+  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 .login-form h1 {
   margin-top: 40px;
-  font-family: sans-serif;
-  font-weight: 900;
-  font-size: 40px;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 36px;
+  color: #2b1d12;
 }
 
 .login-form>p {
   margin: 0px 20px 20px 20px;
-  font-size: large;
+  font-size: 16px;
+  color: #5b5b5b;
 }
 
 .input-container {
@@ -74,12 +81,19 @@ height: 220px;
 .input-container {
   display: flex;
   align-items: center;
-  background: #AFCCD0;
-  border-radius: 10px;
+  background: #f1f5f6;
+  border-radius: 12px;
   width: 70%;
   margin: 10px auto;
-  padding: 5px;
+  padding: 6px 8px;
   position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-container:focus-within {
+  border-color: #afccd0;
+  box-shadow: 0 0 0 3px rgba(175, 204, 208, 0.35);
 }
 
 .icon-box {
@@ -89,7 +103,7 @@ height: 220px;
   width: 34px;
   height: 34px;
   background: transparent;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .material-symbols-outlined {
@@ -102,14 +116,14 @@ height: 220px;
 }
 
 .icon-box span {
-  color: rgb(15, 13, 13);
+  color: #2b1d12;
   font-size: 20px;
 }
 
 .divider {
   width: 1px;
   height: 70%;
-  background: black;
+  background: rgba(0, 0, 0, 0.2);
   margin: 0 8px;
 }
 
@@ -118,12 +132,13 @@ height: 220px;
   background: transparent;
   border: none;
   outline: none;
-  font-size: 16px;
+  font-size: 15px;
   padding: 8px;
+  color: #2b1d12;
 }
 
 .eye-button {
-  background: #E0E2CB;
+  background: #e8e9d7;
   border-radius: 4px;
   border: none;
   cursor: pointer;
@@ -132,7 +147,7 @@ height: 220px;
 }
 
 .eye-button span {
-  color: rgb(41, 40, 40);
+  color: #2b1d12;
   font-size: 14px;
   margin-top: 3px;
 }
@@ -141,7 +156,7 @@ height: 220px;
   text-align: right;
   font-size: 14px;
   margin-right: 15%;
-  color: black;
+  color: #2b1d12;
   cursor: pointer;
   margin: 0px 15% 30px 0px;
 
@@ -159,16 +174,23 @@ height: 220px;
   width: 70%;
   height: 40px;
   border: none;
-  border-radius: 5px;
-  background: #896447;
-  font-size: 17px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #896447 0%, #7a573d 100%);
+  font-size: 16px;
   color: white;
   font-weight: 600;
   cursor: pointer;
+  box-shadow: 0 10px 18px rgba(137, 100, 71, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btn-login:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 22px rgba(137, 100, 71, 0.4);
 }
 
 #register {
-  background: #E0E2CB;
-  color: black;
+  background: #e8e9d7;
+  color: #2b1d12;
   font-weight: 500;
 }
